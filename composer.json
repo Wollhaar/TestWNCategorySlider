@@ -1,0 +1,27 @@
+{
+    "name": "w-n-category-slider/test-w-n-category-slider",
+    "description": "w-n-category-slider/test-w-n-category-slider",
+    "type": "shopware-platform-plugin",
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+        "shopware/core": "~6.6.0"
+    },
+    "extra": {
+        "shopware-plugin-class": "WNCategorySlider\\TestWNCategorySlider",
+        "label": {
+            "de-DE": "Kategorie-Slider | Testplugin Webnetz",
+            "en-GB": "Category slider | Testplugin Webnetz"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "WNCategorySlider\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "WNCategorySlider\\Tests\\": "tests/"
+        }
+    }
+}
