@@ -1,5 +1,5 @@
-import template from './sw-cms-el-config-product-slider.html.twig';
-import './sw-cms-el-config-product-slider.scss';
+import template from './sw-cms-el-config-category-slider.html.twig';
+import './sw-cms-el-config-category-slider.scss';
 
 const { Mixin } = Shopware;
 const { Criteria, EntityCollection } = Shopware.Data;
@@ -19,34 +19,34 @@ export default {
 
     data() {
         return {
-            productCollection: null,
-            productStream: null,
-            showProductStreamPreview: false,
+            categoryCollection: null,
+            categoryStream: null,
+            showCategoryStreamPreview: false,
 
             // Temporary values to store the previous selection in case the user changes the assignment type.
-            tempProductIds: [],
+            tempCategoryIds: [],
             tempStreamId: null,
         };
     },
 
     computed: {
-        productRepository() {
-            return this.repositoryFactory.create('product');
+        categoryRepository() {
+            return this.repositoryFactory.create('category');
         },
 
-        productStreamRepository() {
-            return this.repositoryFactory.create('product_stream');
+        categoryStreamRepository() {
+            return this.repositoryFactory.create('category_stream');
         },
 
-        products() {
-            if (this.element?.data?.products && this.element.data.products.length > 0) {
-                return this.element.data.products;
+        categories() {
+            if (this.element?.data?.categories && this.element.data.categories.length > 0) {
+                return this.element.data.categories;
             }
 
             return null;
         },
 
-        productMediaFilter() {
+        categoryMediaFilter() {
             const criteria = new Criteria(1, 25);
             criteria.addAssociation('cover');
             criteria.addAssociation('options.group');
@@ -54,51 +54,51 @@ export default {
             return criteria;
         },
 
-        productMultiSelectContext() {
+        categoryMultiSelectContext() {
             const context = { ...Shopware.Context.api };
             context.inheritance = true;
 
             return context;
         },
 
-        productAssignmentTypes() {
+        categoryAssignmentTypes() {
             return [{
-                label: this.$tc('sw-cms.elements.productSlider.config.productAssignmentTypeOptions.manual'),
+                label: this.$tc('sw-cms.elements.categorySlider.config.categoryAssignmentTypeOptions.manual'),
                 value: 'static',
             }, {
-                label: this.$tc('sw-cms.elements.productSlider.config.productAssignmentTypeOptions.productStream'),
-                value: 'product_stream',
+                label: this.$tc('sw-cms.elements.categorySlider.config.categoryAssignmentTypeOptions.categoryStream'),
+                value: 'category_stream',
             }];
         },
 
-        productStreamSortingOptions() {
+        categoryStreamSortingOptions() {
             return [{
-                label: this.$tc('sw-cms.elements.productSlider.config.productStreamSortingOptions.nameAsc'),
+                label: this.$tc('sw-cms.elements.categorySlider.config.categoryStreamSortingOptions.nameAsc'),
                 value: 'name:ASC',
             }, {
-                label: this.$tc('sw-cms.elements.productSlider.config.productStreamSortingOptions.nameDesc'),
+                label: this.$tc('sw-cms.elements.categorySlider.config.categoryStreamSortingOptions.nameDesc'),
                 value: 'name:DESC',
             }, {
-                label: this.$tc('sw-cms.elements.productSlider.config.productStreamSortingOptions.creationDateAsc'),
+                label: this.$tc('sw-cms.elements.categorySlider.config.categoryStreamSortingOptions.creationDateAsc'),
                 value: 'createdAt:ASC',
             }, {
-                label: this.$tc('sw-cms.elements.productSlider.config.productStreamSortingOptions.creationDateDesc'),
+                label: this.$tc('sw-cms.elements.categorySlider.config.categoryStreamSortingOptions.creationDateDesc'),
                 value: 'createdAt:DESC',
             }, {
-                label: this.$tc('sw-cms.elements.productSlider.config.productStreamSortingOptions.random'),
+                label: this.$tc('sw-cms.elements.categorySlider.config.categoryStreamSortingOptions.random'),
                 value: 'random',
             }, {
-                label: this.$tc('sw-cms.elements.productSlider.config.productStreamSortingOptions.priceAsc'),
+                label: this.$tc('sw-cms.elements.categorySlider.config.categoryStreamSortingOptions.priceAsc'),
                 value: 'cheapestPrice:ASC',
             }, {
-                label: this.$tc('sw-cms.elements.productSlider.config.productStreamSortingOptions.priceDesc'),
+                label: this.$tc('sw-cms.elements.categorySlider.config.categoryStreamSortingOptions.priceDesc'),
                 value: 'cheapestPrice:DESC',
             }];
         },
 
-        productStreamCriteria() {
+        categoryStreamCriteria() {
             const criteria = new Criteria(1, 10);
-            const sorting = this.element.config.productStreamSorting.value;
+            const sorting = this.element.config.categoryStreamSorting.value;
 
             if (!sorting || sorting === 'random') {
                 return criteria;
@@ -112,16 +112,16 @@ export default {
             return criteria;
         },
 
-        productStreamPreviewColumns() {
+        categoryStreamPreviewColumns() {
             return [
                 {
                     property: 'name',
-                    label: this.$tc('sw-category.base.products.columnNameLabel'),
+                    label: this.$tc('sw-category.base.categories.columnNameLabel'),
                     dataIndex: 'name',
                     sortable: false,
                 }, {
                     property: 'manufacturer.name',
-                    label: this.$tc('sw-category.base.products.columnManufacturerLabel'),
+                    label: this.$tc('sw-category.base.categories.columnManufacturerLabel'),
                     sortable: false,
                 },
             ];
@@ -134,83 +134,85 @@ export default {
 
     methods: {
         createdComponent() {
-            this.initElementConfig('product-slider');
+            this.initElementConfig('category-slider');
 
-            this.productCollection = new EntityCollection('/product', 'product', Shopware.Context.api);
+            this.categoryCollection = new EntityCollection('/category', 'category', Shopware.Context.api);
 
-            if (this.element.config.products.value.length <= 0) {
+            if (this.element.config.categories.value.length <= 0) {
                 return;
             }
 
-            if (this.element.config.products.source === 'product_stream') {
-                this.loadProductStream();
+            if (this.element.config.categories.source === 'category_stream') {
+                this.loadCategoryStream();
             } else {
                 // We have to fetch the assigned entities again
                 // ToDo: Fix with NEXT-4830
                 const criteria = new Criteria(1, 100);
                 criteria.addAssociation('cover');
                 criteria.addAssociation('options.group');
-                criteria.setIds(this.element.config.products.value);
+                criteria.setIds(this.element.config.categories.value);
 
-                this.productRepository
+                this.categoryRepository
                     .search(criteria, { ...Shopware.Context.api, inheritance: true })
                     .then((result) => {
-                        this.productCollection = result;
+                        this.categoryCollection = result;
+                        console.log('category search result');
+                        console.log(result);
                     });
             }
         },
 
         onChangeAssignmentType(type) {
-            if (type === 'product_stream') {
-                this.tempProductIds = this.element.config.products.value;
-                this.element.config.products.value = this.tempStreamId;
+            if (type === 'category_stream') {
+                this.tempCategoryIds = this.element.config.categories.value;
+                this.element.config.categories.value = this.tempStreamId;
             } else {
-                this.tempStreamId = this.element.config.products.value;
-                this.element.config.products.value = this.tempProductIds;
+                this.tempStreamId = this.element.config.categories.value;
+                this.element.config.categories.value = this.tempcategoryIds;
             }
         },
 
-        loadProductStream() {
-            this.productStreamRepository
-                .get(this.element.config.products.value, Shopware.Context.api, new Criteria(1, 25))
+        loadCategoryStream() {
+            this.categoryStreamRepository
+                .get(this.element.config.categories.value, Shopware.Context.api, new Criteria(1, 25))
                 .then((result) => {
-                    this.productStream = result;
+                    this.categoryStream = result;
                 });
         },
 
-        onChangeProductStream(streamId) {
+        onChangeCategoryStream(streamId) {
             if (streamId === null) {
-                this.productStream = null;
+                this.categoryStream = null;
                 return;
             }
 
-            this.loadProductStream();
+            this.loadCategoryStream();
         },
 
-        onClickProductStreamPreview() {
-            if (this.productStream === null) {
+        onClickCategoryStreamPreview() {
+            if (this.categoryStream === null) {
                 return;
             }
 
-            this.showProductStreamPreview = true;
+            this.showcategoryStreamPreview = true;
         },
 
-        onCloseProductStreamModal() {
-            this.showProductStreamPreview = false;
+        onCloseCategoryStreamModal() {
+            this.showcategoryStreamPreview = false;
         },
 
-        onProductsChange() {
-            this.element.config.products.value = this.productCollection.getIds();
+        onCategoriesChange() {
+            this.element.config.categories.value = this.categoryCollection.getIds();
 
             if (!this.element?.data) {
                 return;
             }
 
-            this.$set(this.element.data, 'products', this.productCollection);
+            this.$set(this.element.data, 'categories', this.categoryCollection);
         },
 
         isSelected(itemId) {
-            return this.productCollection.has(itemId);
+            return this.categoryCollection.has(itemId);
         },
     },
 };

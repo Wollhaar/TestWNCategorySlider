@@ -42,56 +42,56 @@
                         >
                             <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
                             {% block sw_cms_element_category_slider_config_content_title %}
-                                <sw-text-field
+                                {#<sw-text-field
                                         v-model:value="element.config.title.value"
-                                        :label="$tc('sw-cms.elements.categorySlider.config.label.title')"
-                                        :placeholder="$tc('sw-cms.elements.categorySlider.config.placeholder.title')"
-                                />
+                                        :label="$tc('sw-cms.elements.productSlider.config.label.title')"
+                                        :placeholder="$tc('sw-cms.elements.productSlider.config.placeholder.title')"
+                                />#}
                             {% endblock %}
 
                             <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
                             {% block sw_cms_element_category_slider_config_content_category_assignment_type %}
-                                <sw-single-select
+                                {#<sw-single-select
                                         v-model:value="element.config.categories.source"
                                         class="sw-cms-el-config-category-slider__category-assignment-type-select"
                                         :label="$tc('sw-cms.elements.categorySlider.config.label.categoryAssignmentType')"
                                         :options="categoryAssignmentTypes"
                                         show-clearable-button
                                         @update:value="onChangeAssignmentType"
-                                />
+                                />#}
                             {% endblock %}
 
                             <template v-if="element.config.categories.source === 'category_stream'">
                                 <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
                                 {% block sw_cms_element_category_slider_config_content_category_stream_select %}
-                                    <sw-entity-single-select
+                                    {#<sw-entity-single-select
                                             v-model:value="element.config.categories.value"
                                             entity="category_stream"
                                             class="sw-cms-el-config-category-slider__category-stream-select"
                                             :label="$tc('sw-cms.elements.categorySlider.config.label.categoryStreamChoice')"
                                             :placeholder="$tc('sw-cms.elements.categorySlider.config.placeholder.categoryStreamChoice')"
                                             show-clearable-button
-                                            @update:value="onChangecategoryStream"
-                                    />
+                                            @update:value="onChangeCategoryStream"
+                                    />#}
                                 {% endblock %}
 
                                 <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
                                 {% block sw_cms_element_category_slider_config_content_category_stream_performance_hint %}
-                                    <sw-alert
+                                    {#<sw-alert
                                             class="sw-cms-el-config-category-slider__category-stream-performance-hint"
                                             variant="info"
                                     >
-                                        {{ $tc('sw-cms.elements.categorySlider.config.textcategoryStreamPerformanceHint') }}
-                                    </sw-alert>
+                                        {{ $tc('sw-cms.elements.categorySlider.config.textDategoryStreamPerformanceHint') }}
+                                    </sw-alert>#}
                                 {% endblock %}
 
                                 <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
                                 {% block sw_cms_element_category_slider_config_content_category_stream_preview %}
-                                    <sw-modal
-                                            v-if="showcategoryStreamPreview"
+                                    {#<sw-modal
+                                            v-if="showCategoryStreamPreview"
                                             :title="categoryStream.name"
                                             class="sw-cms-el-config-category-slider__category-stream-preview-modal"
-                                            @modal-close="onClosecategoryStreamModal"
+                                            @modal-close="onCloseCategoryStreamModal"
                                     >
                                         <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
                                         {% block sw_cms_element_category_slider_config_content_category_stream_preview_grid %}
@@ -106,13 +106,13 @@
                                             {% block sw_cms_element_category_slider_config_content_category_stream_preview_action_close %}
                                                 <sw-button
                                                         size="small"
-                                                        @click="onClosecategoryStreamModal"
+                                                        @click="onCloseCategoryStreamModal"
                                                 >
                                                     {{ $tc('global.sw-modal.labelClose') }}
                                                 </sw-button>
                                             {% endblock %}
                                         </template>
-                                    </sw-modal>
+                                    </sw-modal>#}
                                 {% endblock %}
 
                                 <sw-container
@@ -121,7 +121,7 @@
                                 >
                                     <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
                                     {% block sw_cms_element_category_slider_config_content_category_stream_sorting %}
-                                        <sw-single-select
+                                        {#<sw-single-select
                                                 v-model:value="element.config.categoryStreamSorting.value"
                                                 :label="$tc('sw-cms.elements.categorySlider.config.label.categoryStreamSorting')"
                                                 class="sw-cms-el-config-category-slider__category-stream-sorting"
@@ -129,37 +129,37 @@
                                                 :placeholder="$tc('sw-cms.elements.categorySlider.config.placeholder.categoryStreamSorting')"
                                                 :options="categoryStreamSortingOptions"
                                                 show-clearable-button
-                                        />
+                                        />#}
                                     {% endblock %}
 
                                     <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
                                     {% block sw_cms_element_category_slider_config_content_category_stream_limit %}
-                                        <sw-number-field
+                                        {#<sw-number-field
                                                 v-model:value="element.config.categoryStreamLimit.value"
                                                 :label="$tc('sw-cms.elements.categorySlider.config.label.categoryStreamLimit')"
                                                 class="sw-cms-el-config-category-slider__category-stream-limit"
                                                 :disabled="!categoryStream"
                                                 :min="1"
-                                        />
+                                        />#}
                                     {% endblock %}
                                 </sw-container>
 
                                 <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
                                 {% block sw_cms_element_category_slider_config_content_category_stream_preview_link %}
-                                    <div class="sw-cms-el-config-category-slider__category-stream-preview-link-container">
+                                    {#<div class="sw-cms-el-config-category-slider__category-stream-preview-link-container">
                                         <a
                                                 class="sw-cms-el-config-category-slider__category-stream-preview-link link"
                                                 :class="{ 'is--disabled': !categoryStream }"
                                                 href="#"
-                                                @click.prevent="onClickcategoryStreamPreview"
+                                                @click.prevent="onClickCategoryStreamPreview"
                                         >
-                                            {{ $tc('sw-cms.elements.categorySlider.config.textcategoryStreamPreviewLink') }}
+                                            {{ $tc('sw-cms.elements.categorySlider.config.textCategoryStreamPreviewLink') }}
                                             <sw-icon
                                                     name="regular-long-arrow-right"
                                                     small
                                             />
                                         </a>
-                                    </div>
+                                    </div>#}
                                 {% endblock %}
                             </template>
 
@@ -173,7 +173,7 @@
                                         :placeholder="$tc('sw-cms.elements.categorySlider.config.placeholder.selection')"
                                         :context="categoryMultiSelectContext"
                                         :criteria="categoryMediaFilter"
-                                        @update:entity-collection="oncategoriesChange"
+                                        @update:entity-collection="onCategoriesChange"
                                 >
                                     <template #selection-label-property="{ item }">
                                         <sw-category-variant-info
@@ -193,12 +193,12 @@
                                                 <!-- eslint-disable-next-line sw-deprecation-rules/no-twigjs-blocks -->
                                                 {% block sw_entity_single_select_base_results_list_result_label %}
                                                     <span class="sw-select-result__result-item-text">
-                                    <sw-category-variant-info
-                                            :variations="item.variation"
-                                    >
-                                        {{ item.translated.name || item.name }}
-                                    </sw-category-variant-info>
-                                </span>
+                                                        <sw-category-variant-info
+                                                                :variations="item.variation"
+                                                        >
+                                                            {{ item.translated.name || item.name }}
+                                                        </sw-category-variant-info>
+                                                    </span>
                                                 {% endblock %}
                                             </sw-select-result>
                                         </slot>
